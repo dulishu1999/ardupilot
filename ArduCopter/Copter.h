@@ -191,6 +191,7 @@
 
 #include "mode.h"
 
+//#define USERHOOK_FASTLOOP
 class Copter : public AP_Vehicle {
 public:
     friend class GCS_MAVLINK_Copter;
@@ -199,7 +200,7 @@ public:
     friend class Parameters;
     friend class ParametersG2;
     friend class AP_Avoidance_Copter;
-
+    //c++ 中freind 关键字可以在一个类中声明其他类为该类的友元类，这样友元类就可以访问该类的私有成员函数或变量
 #if ADVANCED_FAILSAFE == ENABLED
     friend class AP_AdvancedFailsafe_Copter;
 #endif
@@ -240,7 +241,7 @@ public:
     Copter(void);
 
     // HAL::Callbacks implementation.
-    void setup() override;
+    void setup() override; //override明确地表示一个函数是对基类中一个虚函数的重载
     void loop() override;
 
 private:
@@ -903,6 +904,7 @@ private:
     void tuning();
 
     // UserCode.cpp
+    void Cxm_uart();
     void userhook_init();
     void userhook_FastLoop();
     void userhook_50Hz();

@@ -1,4 +1,12 @@
 #include "Copter.h"
+#include <AP_HAL/AP_HAL.h>
+#define USERHOOK_INIT
+#define USERHOOK_FASTLOOP
+
+/*
+#直接推油门起飞是纯姿态起飞
+
+*/
 
 #ifdef USERHOOK_INIT
 void Copter::userhook_init()
@@ -8,7 +16,7 @@ void Copter::userhook_init()
 }
 #endif
 
-#ifdef USERHOOK_FASTLOOP
+#ifdef USERHOOK_FASTLOOP 
 void Copter::userhook_FastLoop()
 {
     // put your 100Hz code here

@@ -85,19 +85,20 @@ const AP_HAL::HAL& hal = AP_HAL::get_HAL();
 
 /*
   scheduler table for fast CPUs - all regular tasks apart from the fast_loop()
+  用于快速计算任务的任务调度表 --- 是指除了fast_loop()之外的所有常规任务
   should be listed here, along with how often they should be called (in hz)
   and the maximum time they are expected to take (in microseconds)
  */
 const AP_Scheduler::Task Copter::scheduler_tasks[] = {
-    SCHED_TASK(rc_loop,              100,    130),
-    SCHED_TASK(throttle_loop,         50,     75),
-    SCHED_TASK(update_GPS,            50,    200),
+    SCHED_TASK(rc_loop,              100,    130),//远程遥控轮询
+    SCHED_TASK(throttle_loop,         50,     75),//油门轮询
+    SCHED_TASK(update_GPS,            50,    200),//GPS数据更新轮询
 #if OPTFLOW == ENABLED
-    SCHED_TASK_CLASS(OpticalFlow,          &copter.optflow,             update,         200, 160),
+    SCHED_TASK_CLASS(OpticalFlow,          &copter.optflow,             update,         200, 160),//OpticalFlow 光流任务轮询
 #endif
-    SCHED_TASK(update_batt_compass,   10,    120),
-    SCHED_TASK_CLASS(RC_Channels,          (RC_Channels*)&copter.g2.rc_channels,      read_aux_all,    10,     50),
-    SCHED_TASK(arm_motors_check,      10,     50),
+    SCHED_TASK(update_batt_compass,   10,    120),//读取电池电压数据以及陀螺仪数据
+    SCHED_TASK_CLASS(RC_Channels,          (RC_Channels*)&copter.g2.rc_channels,      read_aux_all,    10,     50),//通道任务轮询
+    SCHED_TASK(arm_motors_check,      10,     50),//电机解锁
 #if TOY_MODE_ENABLED == ENABLED
     SCHED_TASK_CLASS(ToyMode,              &copter.g2.toy_mode,         update,          10,  50),
 #endif
@@ -162,22 +163,22 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #endif
     SCHED_TASK_CLASS(AP_InertialSensor,    &copter.ins,                 periodic,       400,  50),
     SCHED_TASK_CLASS(AP_Scheduler,         &copter.scheduler,           update_logging, 0.1,  75),
-#if RPM_ENABLED == ENABLED
+#if RPM_ENABLED == ENABLED 
     SCHED_TASK(rpm_update,            40,    200),
 #endif
     SCHED_TASK(compass_cal_update,   100,    100),
     SCHED_TASK(accel_cal_update,      10,    100),
     SCHED_TASK_CLASS(AP_TempCalibration,   &copter.g2.temp_calibration, update,          10, 100),
-#if ADSB_ENABLED == ENABLED
+#if ADSB_ENABLED == ENABLED 
     SCHED_TASK(avoidance_adsb_update, 10,    100),
 #endif
 #if ADVANCED_FAILSAFE == ENABLED
     SCHED_TASK(afs_fs_check,          10,    100),
 #endif
-#if AC_TERRAIN == ENABLED
+#if AC_TERRAIN == ENABLED 
     SCHED_TASK(terrain_update,        10,    100),
 #endif
-#if GRIPPER_ENABLED == ENABLED
+#if GRIPPER_ENABLED == ENABLED 
     SCHED_TASK_CLASS(AP_Gripper,           &copter.g2.gripper,          update,          10,  75),
 #endif
 #if WINCH_ENABLED == ENABLED
@@ -198,18 +199,26 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     SCHED_TASK(userhook_SuperSlowLoop, 1,   75),
 #endif
-#if BUTTON_ENABLED == ENABLED
+#if BUTTON_ENABLED == ENABLED 
     SCHED_TASK_CLASS(AP_Button,            &copter.g2.button,           update,           5, 100),
 #endif
-#if STATS_ENABLED == ENABLED
+#if STATS_ENABLED == ENABLED 
     SCHED_TASK_CLASS(AP_Stats,             &copter.g2.stats,            update,           1, 100),
 #endif
-#if OSD_ENABLED == ENABLED
+#if OSD_ENABLED == ENABLED 
     SCHED_TASK(publish_osd_info, 1, 10),
 #endif
+    //SCHED_TASK(Cxm_uart,  100,    130),
 };
 
 constexpr int8_t Copter::_failsafe_priorities[7];
+
+void Copter::Cxm_uart(){
+   hal.scheduler->delay(1000);
+   hal.uartA->begin(9600);
+   hal.uartA->printf("1212121212121\r\n");
+}
+
 
 void Copter::setup()
 {
@@ -239,6 +248,7 @@ void Copter::fast_loop()
     ins.update();
 
     // run low level rate controllers that only require IMU data
+    //仅利用IMU数据 进行姿态控制
     attitude_control->rate_controller_run();
 
     // send outputs to the motors library immediately
@@ -283,6 +293,7 @@ void Copter::fast_loop()
 }
 
 // rc_loops - reads user input from transmitter/receiver
+// remote control 接收转接器或者接收机数据
 // called at 100hz
 void Copter::rc_loop()
 {
@@ -621,7 +632,7 @@ Copter::Copter(void)
     sensor_health.baro = true;
     sensor_health.compass = true;
 }
-
+//声明一个copter对象，声明的时候会采用构造函数对对象进行初始化构造
 Copter copter;
-
-AP_HAL_MAIN_CALLBACKS(&copter);
+//可以把其理解为一个主函数，飞行任务从这里开始执行
+AP_HAL_MAIN_CALLBACKS(&copter); 

@@ -326,7 +326,8 @@ void AC_AttitudeControl_Heli::rate_controller_run()
     if (_flags_heli.flybar_passthrough) {
         _motors.set_roll(_passthrough_roll / 4500.0f);
         _motors.set_pitch(_passthrough_pitch / 4500.0f);
-    } else {
+    } 
+    else {
         rate_bf_to_motor_roll_pitch(gyro_latest, _rate_target_ang_vel.x, _rate_target_ang_vel.y);
     }
     if (_flags_heli.tail_passthrough) {

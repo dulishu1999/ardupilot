@@ -5,7 +5,7 @@ void Copter::read_barometer(void)
 {
     barometer.update();
 
-    baro_alt = barometer.get_altitude() * 100.0f;
+    baro_alt = barometer.get_altitude() * 100.0f;//气压及
 
     motors->set_air_density_ratio(barometer.get_air_density_ratio());
 }

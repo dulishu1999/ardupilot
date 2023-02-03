@@ -81,6 +81,7 @@ void Copter::arm_motors_check()
 }
 
 // auto_disarm_check - disarms the copter if it has been sitting on the ground in manual mode with throttle low for at least 15 seconds
+// 如果直升机在油门低的情况下以手动模式降落在地面至少15秒，则解除其防护
 void Copter::auto_disarm_check()
 {
     uint32_t tnow_ms = millis();
