@@ -310,6 +310,7 @@ bool Copter::set_mode(const uint8_t new_mode, const ModeReason reason)
 }
 
 // update_flight_mode - calls the appropriate attitude controllers based on flight mode
+//飞行模式更新，意思是基于飞行模式的合适的姿态控制器
 // called at 100hz or more
 void Copter::update_flight_mode()
 {

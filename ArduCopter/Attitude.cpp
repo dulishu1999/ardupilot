@@ -35,6 +35,7 @@ float Copter::get_pilot_desired_yaw_rate(int16_t stick_angle)
  ****************************************************************/
 
 // update estimated throttle required to hover (if necessary)
+//更新悬停所需要估计油门--期望油门
 //  called at 100hz
 void Copter::update_throttle_hover()
 {

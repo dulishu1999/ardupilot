@@ -1,7 +1,6 @@
 #include "Copter.h"
 #include <AP_HAL/AP_HAL.h>
-#define USERHOOK_INIT
-#define USERHOOK_FASTLOOP
+
 
 /*
 #直接推油门起飞是纯姿态起飞

@@ -37,7 +37,7 @@ void ModeRTL::restart_without_terrain()
     }
 }
 
-// rtl_run - runs the return-to-launch controller
+// rtl_run - runs the return-to-launch controller 从发射到返回控制器
 // should be called at 100hz or more
 void ModeRTL::run(bool disarm_on_land)
 {
@@ -144,21 +144,22 @@ void ModeRTL::return_start()
 }
 
 // rtl_climb_return_run - implements the initial climb, return home and descent portions of RTL which all rely on the wp controller
+//执行RTL的初始爬升、返航和下降部分，这些部分都依赖于wp控制器 
 //      called by rtl_run at 100hz or more
 void ModeRTL::climb_return_run()
 {
     // if not armed set throttle to zero and exit immediately
-    if (is_disarmed_or_landed()) {
+    if (is_disarmed_or_landed()) {//如果未解除锁定或者已经完成降落，则直接退出，不执行爬升起飞流程
         make_safe_spool_down();
         return;
     }
 
     // process pilot's yaw input
     float target_yaw_rate = 0;
-    if (!copter.failsafe.radio) {
+    if (!copter.failsafe.radio) {//失控保护
         // get pilot's desired yaw rate
         target_yaw_rate = get_pilot_desired_yaw_rate(channel_yaw->get_control_in());
-        if (!is_zero(target_yaw_rate)) {
+        if (!is_zero(target_yaw_rate)) {//如果获得了期望yaw数据，则对yaw进行hold
             auto_yaw.set_mode(AUTO_YAW_HOLD);
         }
     }
@@ -166,17 +167,18 @@ void ModeRTL::climb_return_run()
     // set motors to full range
     motors->set_desired_spool_state(AP_Motors::DesiredSpoolState::THROTTLE_UNLIMITED);
 
-    // run waypoint controller
+    // run waypoint controller 运行航路点控制器
     copter.failsafe_terrain_set_status(wp_nav->update_wpnav());
 
-    // call z-axis position controller (wpnav should have already updated it's alt target)
+    // call z-axis position controller (wpnav should have already updated it's alt target) z轴 期望点控制
     pos_control->update_z_controller();
 
-    // call attitude controller
+    // call attitude controller//姿态控制
     if (auto_yaw.mode() == AUTO_YAW_HOLD) {
         // roll & pitch from waypoint controller, yaw rate from pilot
         attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), target_yaw_rate);
-    }else{
+    }
+    else{
         // roll, pitch from waypoint controller, yaw heading from auto_heading()
         attitude_control->input_euler_angle_roll_pitch_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), auto_yaw.yaw(),true);
     }

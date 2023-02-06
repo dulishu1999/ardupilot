@@ -116,9 +116,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if VISUAL_ODOMETRY_ENABLED == ENABLED
     SCHED_TASK_CLASS(AP_VisualOdom,       &copter.g2.visual_odom,        update,         400,  50),
 #endif
-    SCHED_TASK(update_altitude,       10,    100),
+    SCHED_TASK(update_altitude,       10,    100),//气压计高度数据更新
     SCHED_TASK(run_nav_updates,       50,    100),
-    SCHED_TASK(update_throttle_hover,100,     90),
+    SCHED_TASK(update_throttle_hover,100,     90),//期望的悬停油门更新
 #if MODE_SMARTRTL_ENABLED == ENABLED
     SCHED_TASK_CLASS(ModeSmartRTL, &copter.mode_smartrtl,       save_position,    3, 100),
 #endif
@@ -138,7 +138,7 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK(check_dynamic_flight,  50,     75),
 #endif
 #if LOGGING_ENABLED == ENABLED
-    SCHED_TASK(fourhundred_hz_logging,400,    50),
+    SCHED_TASK(fourhundred_hz_logging,400,    50),//日志任务
 #endif
     SCHED_TASK_CLASS(AP_Notify,            &copter.notify,              update,          50,  90),
     SCHED_TASK(one_hz_loop,            1,    100),
@@ -256,10 +256,10 @@ void Copter::fast_loop()
 
     // run EKF state estimator (expensive)
     // --------------------
-    read_AHRS();
+    read_AHRS();//姿态解算
 
 #if FRAME_CONFIG == HELI_FRAME
-    update_heli_control_dynamics();
+    update_heli_control_dynamics();//动力学控制机
     #if MODE_AUTOROTATE_ENABLED == ENABLED
         heli_update_autorotation();
     #endif
@@ -272,7 +272,7 @@ void Copter::fast_loop()
     // check if ekf has reset target heading or position
     check_ekf_reset();
 
-    // run the attitude controllers
+    // run the attitude controllers 运行姿态控制器
     update_flight_mode();
 
     // update home from EKF if necessary
