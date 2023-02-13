@@ -273,6 +273,7 @@ void Copter::fast_loop()
     check_ekf_reset();
 
     // run the attitude controllers 运行姿态控制器
+    // 我知道这个函数是用来做控制的，但是他负责哪几部分的控制，姿态，高度，xy？
     update_flight_mode();
 
     // update home from EKF if necessary
@@ -300,7 +301,7 @@ void Copter::rc_loop()
     // Read radio and 3-position switch on radio
     // -----------------------------------------
     read_radio();
-    rc().read_mode_switch();
+    rc().read_mode_switch();//不断读取模式开关，这个模式开关取决于飞控处于什么模式
 }
 
 // throttle_loop - should be run at 50 hz
@@ -539,10 +540,7 @@ void Copter::update_simple_mode(void)
     if (ap.simple_mode == 1) {
         // rotate roll, pitch input by -initial simple heading (i.e. north facing)
         rollx = channel_roll->get_control_in()*simple_cos_yaw - channel_pitch->get_control_in()*simple_sin_yaw;
-        pitchx = channel_roll->get_control_in()*simple_sin_yaw + channel_pitch->get_control_in()*simple_cos_yaw;
-    }else{
-        // rotate roll, pitch input by -super simple heading (reverse of heading to home)
-        rollx = channel_roll->get_control_in()*super_simple_cos_yaw - channel_pitch->get_control_in()*super_simple_sin_yaw;
+        pitchx = channel_roll->gchannel_rollet_control_in()*super_simple_cos_yaw - channel_pitch->get_control_in()*super_simple_sin_yaw;
         pitchx = channel_roll->get_control_in()*super_simple_sin_yaw + channel_pitch->get_control_in()*super_simple_cos_yaw;
     }
 

@@ -750,7 +750,7 @@ private:
 };
 #endif // OPTFLOW
 
-
+//ModeGuided 继承了 Mode这个类
 class ModeGuided : public Mode {
 
 public:
@@ -759,7 +759,9 @@ public:
 
     bool init(bool ignore_checks) override;
     void run() override;
-
+    //说明run() 是一个虚函数，在子函数中实现 并覆盖了基类同名函数
+    //也就是我在基类同名函数中其实是找不到run()这个函数的实现的，声明为虚函数，
+    //我可以直接用基类指针直接调用这个子类中实现的函数
     bool requires_GPS() const override { return true; }
     bool has_manual_throttle() const override { return false; }
     bool allows_arming(bool from_gcs) const override { return from_gcs; }

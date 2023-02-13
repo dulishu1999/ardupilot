@@ -125,9 +125,10 @@ bool RC_Channel::get_reverse(void) const
     return bool(reversed.get());
 }
 
-// read input from hal.rcin or overrides
+// read input from hal.rcin or overrides  遥控通道输入数据更新
 bool RC_Channel::update(void)
 {
+    //radio_in 来自2个地方： 1. 从mavlink消息中传送进来， 2. 从后端接口读取；
     if (has_override() && !rc().ignore_overrides()) {
         radio_in = override_value;
     } else if (!rc().ignore_receiver()) {
@@ -391,12 +392,12 @@ void RC_Channel::reset_mode_switch()
 void RC_Channel::read_mode_switch()
 {
     // calculate position of flight mode switch
-    const uint16_t pulsewidth = get_radio_in();
+    const uint16_t pulsewidth = get_radio_in();//plus是指脉冲宽度
     if (pulsewidth <= 900 || pulsewidth >= 2200) {
         return;  // This is an error condition
     }
 
-    modeswitch_pos_t position;
+    modeswitch_pos_t position;//间隔130 根据带宽长度来区分不同通道
     if      (pulsewidth < 1231) position = 0;
     else if (pulsewidth < 1361) position = 1;
     else if (pulsewidth < 1491) position = 2;

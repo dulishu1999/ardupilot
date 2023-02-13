@@ -73,6 +73,8 @@
 #include "config.h"
 
 #define USERHOOK_FASTLOOP
+#define USERHOOK_50HZLOOP
+
 
 #if FRAME_CONFIG == HELI_FRAME
     #define AC_AttitudeControl_t AC_AttitudeControl_Heli
@@ -212,7 +214,7 @@ public:
     friend class RC_Channels_Copter;
 
     friend class AutoTune;
-
+    //Modexxx类都是继承Mode类
     friend class Mode;
     friend class ModeAcro;
     friend class ModeAcro_Heli;
@@ -262,7 +264,7 @@ private:
     // used to detect MAVLink acks from GCS to stop compassmot
     uint8_t command_ack_counter;
 
-    // primary input control channels
+    // primary input control channels 主要的控制通道输入
     RC_Channel *channel_roll;
     RC_Channel *channel_pitch;
     RC_Channel *channel_throttle;

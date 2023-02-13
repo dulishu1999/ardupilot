@@ -58,7 +58,7 @@ bool RC_Channels_Copter::has_valid_input() const
 }
 
 
-// init_aux_switch_function - initialize aux functions
+// init_aux_switch_function - initialize aux functions 初始化通道函数 通过通道指定功能
 void RC_Channel_Copter::init_aux_function(const aux_func_t ch_option, const aux_switch_pos_t ch_flag)
 {
     // init channel options
@@ -117,7 +117,7 @@ void RC_Channel_Copter::init_aux_function(const aux_func_t ch_option, const aux_
     }
 }
 
-// do_aux_function_change_mode - change mode based on an aux switch
+// do_aux_function_change_mode - change mode based on an aux switch 基于通道开关来改变模式
 // being moved
 void RC_Channel_Copter::do_aux_function_change_mode(const Mode::Number mode,
                                                      const aux_switch_pos_t ch_flag)
@@ -144,7 +144,7 @@ void RC_Channel_Copter::do_aux_function_change_mode(const Mode::Number mode,
     }
 }
 
-// do_aux_function - implement the function invoked by auxiliary switches
+// do_aux_function - implement the function invoked by auxiliary switches 通过通道开关实现功能函数的调用
 void RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const aux_switch_pos_t ch_flag)
 {
     switch(ch_option) {
@@ -165,7 +165,7 @@ void RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const aux_sw
             copter.set_simple_mode(ch_flag);
             break;
 
-        case AUX_FUNC::RTL:
+        case AUX_FUNC::RTL://
 #if MODE_RTL_ENABLED == ENABLED
             do_aux_function_change_mode(Mode::Number::RTL, ch_flag);
 #endif

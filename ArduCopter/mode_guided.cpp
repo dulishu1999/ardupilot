@@ -348,12 +348,12 @@ void ModeGuided::run()
         break;
 
     case Guided_Velocity:
-        // run velocity controller
+        // run velocity controller 速度控制器
         vel_control_run();
         break;
 
     case Guided_PosVel:
-        // run position-velocity controller
+        // run position-velocity controller 点速度控制器
         posvel_control_run();
         break;
 

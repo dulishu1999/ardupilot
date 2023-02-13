@@ -87,11 +87,37 @@ enum tuning_func {
 #define WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP_EXCEPT_RTL    2   // auto pilot will face next waypoint except when doing RTL at which time it will stay in it's last
 #define WP_YAW_BEHAVIOR_LOOK_AHEAD                    3   // auto pilot will look ahead during missions and rtl (primarily meant for traditional helicopters)
 
-// Auto modes
+/*ArduPilot中有14种常用的模式：
+
+    依赖GPS的模式有：Auto、Circle、Drift、Follow Me、Guided、Loiter、PosHold、RTL和Throw；
+    不依赖GPS的有：Acro、Alt Hold、Land、Sport和Stabilize模式
+    Acro（特技模式）
+    Alt Hold（定高模式）
+    Auto（自动模式）将执行预编程指令，包括导航命令和DO命令。
+    Brake（刹车模式）这个模式将尽快停止飞行器，该模式使用了Loiter，需要GPS的支持，一旦启用，该模式不接受飞行操控信号。
+    Circle（绕圈模式）
+        绕圈模式会以兴趣点为中心，机头朝兴趣点旋转，旋转半径可以通过CIRCLE_RADIUS控制。如果半径为0，则飞行器原地不动，缓慢旋转。飞行速度可以通过CIRCLE_RATE修改，正表示顺时针旋转。当旋转时产生的中心加速度超过限制（WPNAV_ACCEL）时，旋转速度会被限制。
+        roll和pitch对该模式无效，但是throttle可以控制飞行高度，遥控器可以控制yaw，调整机头方向，并且重启该模式前，该模式不会尝试重新获取yaw控制权。
+        在mission planner中，LOITER_TURNS包含了CIRCLE模式
+    Drift（漂移模式）
+        漂移模式允许像固定翼一样操控多旋翼，其设置了自动的坐标系转换。
+        用户直接控制yaw和pitch，但是roll由飞行器控制；
+        与stabilize相同的方式控制throttle
+    Guided（引导模式）
+        该模式利用数传好地面站，实时引导飞行器位置。引导模式不是一个基本模式，是在其他几种模式中切换形成的。当飞行器到达目标点后，会在目标点上方悬停。
+        Guided_NoGPS模式不需要GPS，他接受姿态目标而非速度和位置目标
+    Loiter（悬停模式）悬停模式会保持飞行器当前的高度、位置和航向
+        控制
+            可以通过roll和pitch控制飞行器位置，默认水平最大速度为5m/s；
+            高度可以通过throttle控制，如同AltHold模式；
+            航向可以通过yaw控制；
+            只有在GPS 3D 锁定并且HODP小于2.0时才能在Loiter模式下解锁
+*/
+// Auto modes 自动模式
 enum AutoMode {
-    Auto_TakeOff,
-    Auto_WP,
-    Auto_Land,
+    Auto_TakeOff,//自动起飞
+    Auto_WP,//自动定点
+    Auto_Land,//自动降落
     Auto_RTL,
     Auto_CircleMoveToEdge,
     Auto_Circle,
@@ -102,7 +128,7 @@ enum AutoMode {
     Auto_NavPayloadPlace,
 };
 
-// Guided modes
+// Guided modes 引导模式
 enum GuidedMode {
     Guided_TakeOff,
     Guided_WP,

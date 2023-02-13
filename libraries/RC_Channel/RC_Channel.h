@@ -5,7 +5,7 @@
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
 
-#define NUM_RC_CHANNELS 16
+#define NUM_RC_CHANNELS 16 //遥控通道数
 
 /// @class	RC_Channel
 /// @brief	Object managing one RC channel

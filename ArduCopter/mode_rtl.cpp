@@ -149,7 +149,7 @@ void ModeRTL::return_start()
 void ModeRTL::climb_return_run()
 {
     // if not armed set throttle to zero and exit immediately
-    if (is_disarmed_or_landed()) {//如果未解除锁定或者已经完成降落，则直接退出，不执行爬升起飞流程
+    if (is_disarmed_or_landed()){//如果未解除锁定或者已经完成降落，则直接退出，不执行爬升起飞流程
         make_safe_spool_down();
         return;
     }

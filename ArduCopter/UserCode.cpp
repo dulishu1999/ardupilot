@@ -1,6 +1,8 @@
 #include "Copter.h"
 #include <AP_HAL/AP_HAL.h>
 
+#define PHASE_STEP_SWITCH 1
+#define PHASE_STEP_SWITCH_PITCH_ROLL 1 
 
 /*
 #直接推油门起飞是纯姿态起飞
@@ -19,6 +21,21 @@ void Copter::userhook_init()
 void Copter::userhook_FastLoop()
 {
     // put your 100Hz code here
+    if(PHASE_STEP_SWITCH){//如果遥控器接收值发生翻转，表示触发执行阶跃函数
+        switch (PHASE_STEP_SWITCH_PITCH_ROLL)
+        {
+        case 1:
+            /* code */
+            break;
+        case 2:
+            /* code */
+            break;
+        
+        default:
+            break;
+        }
+
+    }
 }
 #endif
 

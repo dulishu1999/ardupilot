@@ -75,11 +75,10 @@ bool RC_Channels::read_input(void)
     has_new_overrides = false;
 
     bool success = false;
-    for (uint8_t i=0; i<NUM_RC_CHANNELS; i++) {
-        success |= channel(i)->update();
+    for (uint8_t i=0; i<NUM_RC_CHANNELS; i++) {//更新所有通道中的遥控数据
+        success |= channel(i)->update();//对每一个通道中的rc值都进行了更新
     }
-
-    return success;
+    return success;//所有通道数据是否全部更新完成
 }
 
 uint8_t RC_Channels::get_valid_channel_count(void)
@@ -169,7 +168,7 @@ void RC_Channels::init_aux_all()
 //
 RC_Channel *RC_Channels::flight_mode_channel()
 {
-    const int8_t num = flight_mode_channel_number();
+    const int8_t num = flight_mode_channel_number();//获取模型通道数量
     if (num <= 0) {
         return nullptr;
     }

@@ -1047,6 +1047,7 @@ void AC_PosControl::desired_vel_to_pos(float nav_dt)
 ///     desired velocity (_vel_desired) is combined into final target velocity
 ///     converts desired velocities in lat/lon directions to accelerations in lat/lon frame
 ///     converts desired accelerations provided in lat/lon frame to roll/pitch angles
+/*xy轴水平控制器*/
 void AC_PosControl::run_xy_controller(float dt)
 {
     float ekfGndSpdLimit, ekfNavVelGainScaler;
@@ -1059,7 +1060,8 @@ void AC_PosControl::run_xy_controller(float dt)
     if (kP <= 0.0f) {
         _vel_target.x = 0.0f;
         _vel_target.y = 0.0f;
-    } else {
+    } 
+    else {
         // calculate distance error
         _pos_error.x = _pos_target.x - curr_pos.x;
         _pos_error.y = _pos_target.y - curr_pos.y;

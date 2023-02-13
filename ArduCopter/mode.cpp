@@ -320,8 +320,7 @@ void Copter::update_flight_mode()
 }
 
 // exit_mode - high level call to organise cleanup as a flight mode is exited
-void Copter::exit_mode(Mode *&old_flightmode,
-                       Mode *&new_flightmode)
+void Copter::exit_mode(Mode *&old_flightmode,Mode *&new_flightmode)
 {
 #if AUTOTUNE_ENABLED == ENABLED
     if (old_flightmode == &mode_autotune) {
