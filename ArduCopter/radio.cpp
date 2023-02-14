@@ -6,38 +6,38 @@
 
 void Copter::default_dead_zones()
 {
-    channel_roll->set_default_dead_zone(20);
-    channel_pitch->set_default_dead_zone(20);
+    channel_roll->set_default_dead_zone(20);//+-20
+    channel_pitch->set_default_dead_zone(20);//+-20
 #if FRAME_CONFIG == HELI_FRAME
-    channel_throttle->set_default_dead_zone(10);
-    channel_yaw->set_default_dead_zone(15);
+    channel_throttle->set_default_dead_zone(10);//+-10
+    channel_yaw->set_default_dead_zone(15);//+-15
 #else
     channel_throttle->set_default_dead_zone(30);
     channel_yaw->set_default_dead_zone(20);
 #endif
     rc().channel(CH_6)->set_default_dead_zone(0);
 }
-
+/*遥控器通道映射*/
 void Copter::init_rc_in()
 {
-    channel_roll     = rc().channel(rcmap.roll()-1);
-    channel_pitch    = rc().channel(rcmap.pitch()-1);
-    channel_throttle = rc().channel(rcmap.throttle()-1);
-    channel_yaw      = rc().channel(rcmap.yaw()-1);
+    channel_roll     = rc().channel(rcmap.roll()-1);// rcmap.roll() 可以获取其通道号 横滚通道
+    channel_pitch    = rc().channel(rcmap.pitch()-1);//俯仰通道
+    channel_throttle = rc().channel(rcmap.throttle()-1);//油门通道
+    channel_yaw      = rc().channel(rcmap.yaw()-1);//偏航通道
 
-    // set rc channel ranges
-    channel_roll->set_angle(ROLL_PITCH_YAW_INPUT_MAX);
-    channel_pitch->set_angle(ROLL_PITCH_YAW_INPUT_MAX);
-    channel_yaw->set_angle(ROLL_PITCH_YAW_INPUT_MAX);
-    channel_throttle->set_range(1000);
+    // set rc channel ranges 设置辅助伺服范围
+    channel_roll->set_angle(ROLL_PITCH_YAW_INPUT_MAX); // 最大4500 +— 4500
+    channel_pitch->set_angle(ROLL_PITCH_YAW_INPUT_MAX);// +— 4500
+    channel_yaw->set_angle(ROLL_PITCH_YAW_INPUT_MAX);//   +— 4500
+    channel_throttle->set_range(1000);//                  +-1000
 
     // set auxiliary servo ranges
-    rc().channel(CH_5)->set_range(1000);
-    rc().channel(CH_6)->set_range(1000);
-    rc().channel(CH_7)->set_range(1000);
-    rc().channel(CH_8)->set_range(1000);
+    rc().channel(CH_5)->set_range(1000);//                  +-1000
+    rc().channel(CH_6)->set_range(1000);//                  +-1000
+    rc().channel(CH_7)->set_range(1000);//                  +-1000
+    rc().channel(CH_8)->set_range(1000);//                  +-1000
 
-    // set default dead zones
+    // set default dead zones 设置默认死区
     default_dead_zones();
 
     // initialise throttle_zero flag

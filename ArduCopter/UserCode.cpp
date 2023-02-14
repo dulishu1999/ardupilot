@@ -1,8 +1,6 @@
 #include "Copter.h"
+#include <chrono>
 #include <AP_HAL/AP_HAL.h>
-
-#define PHASE_STEP_SWITCH 1
-#define PHASE_STEP_SWITCH_PITCH_ROLL 1 
 
 /*
 #直接推油门起飞是纯姿态起飞
@@ -21,16 +19,77 @@ void Copter::userhook_init()
 void Copter::userhook_FastLoop()
 {
     // put your 100Hz code here
-    if(PHASE_STEP_SWITCH){//如果遥控器接收值发生翻转，表示触发执行阶跃函数
-        switch (PHASE_STEP_SWITCH_PITCH_ROLL)
+    static RC_Channel *ch6 = rc().channel(CH_6);
+    static uint8_t ch6_flag = 0;
+    static u_int8_t timeCnt = 0;
+    if(ch6->get_control_in() == 0) ch6_flag = 0;
+    if(ch6->get_control_in() ==1000 && ch6_flag == 0){//如果遥控器接收值发生翻转，表示触发执行阶跃函数
+        switch (g.phasestep_channelclass)
         {
-        case 1:
+        case 1://pitch
             /* code */
+            if(g.phasestep_stepclass == 0){//step 类型为不翻转
+                if(timeCnt == 0){
+                    copter.addPitchAngle += g.phasestep_angle;
+                }
+                timeCnt ++;
+                if(timeCnt > g.phasestep_ts*100){
+                    copter.addPitchAngle = 0;
+                    timeCnt = 0;
+                    ch6_flag = 1;
+                }
+            }
+            if(g.phasestep_stepclass == 1){//step 类型为翻转
+                if(timeCnt == 0){
+                    copter.addPitchAngle += g.phasestep_angle;
+                }
+                timeCnt ++;
+                if(timeCnt > g.phasestep_ts*100 && timeCnt <= g.phasestep_ts*100*2){
+                    copter.addPitchAngle = 0;
+                }
+                else if(timeCnt > 2*g.phasestep_ts*100 && timeCnt <= g.phasestep_ts*100*3){
+                    copter.addPitchAngle -= g.phasestep_angle;
+
+                }
+                else{
+                    timeCnt = 0;
+                    ch6_flag = 1;
+
+                }
+            }
             break;
-        case 2:
+        case 2://roll
             /* code */
+            if(g.phasestep_stepclass == 0){//step 类型为不翻转
+                if(timeCnt == 0){
+                    copter.addRollAngle += g.phasestep_angle;
+                }
+                timeCnt ++;
+                if(timeCnt > g.phasestep_ts*100){
+                    copter.addRollAngle = 0;
+                    timeCnt = 0;
+                    ch6_flag = 1;
+                }
+            }
+            if(g.phasestep_stepclass == 1){//step 类型为翻转
+                if(timeCnt == 0){
+                    copter.addRollAngle += g.phasestep_angle;
+                }
+                timeCnt ++;
+                if(timeCnt > g.phasestep_ts*100 && timeCnt <= g.phasestep_ts*100*2){
+                    copter.addRollAngle = 0;
+                }
+                else if(timeCnt > 2*g.phasestep_ts*100 && timeCnt <= g.phasestep_ts*100*3){
+                    copter.addRollAngle -= g.phasestep_angle;
+
+                }
+                else{
+                    timeCnt = 0;
+                    ch6_flag = 1;
+
+                }
+            }
             break;
-        
         default:
             break;
         }

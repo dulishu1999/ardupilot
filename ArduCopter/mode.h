@@ -128,8 +128,8 @@ protected:
     AP_AHRS &ahrs;
     AC_AttitudeControl_t *&attitude_control;
     MOTOR_CLASS *&motors;
-    RC_Channel *&channel_roll;
-    RC_Channel *&channel_pitch;
+    RC_Channel *&channel_roll;  //这只是声明了多个RC_Channel 的一个指针引用，指针引用为空，尚未实例化
+    RC_Channel *&channel_pitch; 
     RC_Channel *&channel_throttle;
     RC_Channel *&channel_yaw;
     float &G_Dt;

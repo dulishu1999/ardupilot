@@ -712,7 +712,10 @@ const AP_Param::Info Copter::var_info[] = {
     // @Path: ../libraries/AP_OSD/AP_OSD.cpp
     GOBJECT(osd, "OSD", AP_OSD),
 #endif
-
+    GSCALAR(phasestep_channelclass, "PHASESTEP_CHANNELCLASS",   0),
+    GSCALAR(phasestep_stepclass, "PHASESTEP_STEPCLASS",   0),
+    GSCALAR(phasestep_ts, "PHASESTEP_TS",   0),
+    GSCALAR(phasestep_angle, "PHASESTEP_ANGLE",   0),
     // @Group:
     // @Path: Parameters.cpp
     GOBJECT(g2, "",  ParametersG2),

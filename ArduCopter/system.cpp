@@ -109,8 +109,8 @@ void Copter::init_ardupilot()
 #if FRAME_CONFIG == HELI_FRAME
     input_manager.set_loop_rate(scheduler.get_loop_rate_hz());
 #endif
-
-    init_rc_in();               // sets up rc channels from radio
+    // sets up rc channels from radio 遥控器通道的初始化
+    init_rc_in();               
 
     // allocate the motors class
     allocate_motors();

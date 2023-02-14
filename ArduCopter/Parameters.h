@@ -372,7 +372,10 @@ public:
         k_param_logger = 253, // 253 - Logging Group
 
         // 254,255: reserved
-
+        k_param_phasestep_channelclass,
+        k_param_phasestep_stepclass,
+        k_param_phasestep_ts,
+        k_param_phasestep_angle,
         // the k_param_* space is 9-bits in size
         // 511: reserved
     };
@@ -465,6 +468,10 @@ public:
     AP_Int8                 acro_trainer;
     AP_Float                acro_rp_expo;
 
+    AP_Int8         phasestep_channelclass;
+    AP_Int8         phasestep_stepclass;
+    AP_Int8         phasestep_ts;
+    AP_Int8         phasestep_angle;
     // Note: keep initializers here in the same order as they are declared
     // above.
     Parameters()

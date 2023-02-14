@@ -90,7 +90,7 @@ const AP_HAL::HAL& hal = AP_HAL::get_HAL();
   and the maximum time they are expected to take (in microseconds)
  */
 const AP_Scheduler::Task Copter::scheduler_tasks[] = {
-    SCHED_TASK(rc_loop,              100,    130),//远程遥控轮询
+    SCHED_TASK(rc_loop,              100,    130),//远程遥控轮询 读取遥控器数据，10ms 判断模式是否改变
     SCHED_TASK(throttle_loop,         50,     75),//油门轮询
     SCHED_TASK(update_GPS,            50,    200),//GPS数据更新轮询
 #if OPTFLOW == ENABLED
@@ -223,14 +223,17 @@ void Copter::Cxm_uart(){
 void Copter::setup()
 {
     // Load the default values of variables listed in var_info[]s
+    //加载初始化参数列表到 var_info[]s
     AP_Param::setup_sketch_defaults();
 
     // setup storage layout for copter
+    //设置无人机的结构布局
     StorageManager::set_layout_copter();
-
+    //初始化传感器
     init_ardupilot();
 
     // initialise the main loop scheduler
+    //初始化 main loop 任务
     scheduler.init(&scheduler_tasks[0], ARRAY_SIZE(scheduler_tasks), MASK_LOG_PM);
 }
 
@@ -540,7 +543,10 @@ void Copter::update_simple_mode(void)
     if (ap.simple_mode == 1) {
         // rotate roll, pitch input by -initial simple heading (i.e. north facing)
         rollx = channel_roll->get_control_in()*simple_cos_yaw - channel_pitch->get_control_in()*simple_sin_yaw;
-        pitchx = channel_roll->gchannel_rollet_control_in()*super_simple_cos_yaw - channel_pitch->get_control_in()*super_simple_sin_yaw;
+        pitchx = channel_roll->get_control_in()*simple_sin_yaw + channel_pitch->get_control_in()*simple_cos_yaw;
+    }else{
+        // rotate roll, pitch input by -super simple heading (reverse of heading to home)
+        rollx = channel_roll->get_control_in()*super_simple_cos_yaw - channel_pitch->get_control_in()*super_simple_sin_yaw;
         pitchx = channel_roll->get_control_in()*super_simple_sin_yaw + channel_pitch->get_control_in()*super_simple_cos_yaw;
     }
 

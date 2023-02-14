@@ -28,7 +28,7 @@ class RC_Channels_PIDTest : public RC_Channels
 {
 public:
     RC_Channel *channel(uint8_t chan) override {
-        return &obj_channels[chan];//每调用一次切换一次通道，在去读取该通道的值
+        return &obj_channels[chan];//每调用都返回一个指定通道的对象
     }
 
     RC_Channel_PIDTest obj_channels[NUM_RC_CHANNELS];

@@ -27,7 +27,8 @@ void ModeStabilize_Heli::run()
 
     // convert pilot input to lean angles
     get_pilot_desired_lean_angles(target_roll, target_pitch, copter.aparm.angle_max, copter.aparm.angle_max);
-
+    target_roll += copter.addRollAngle;
+    target_pitch+= copter.addPitchAngle;
     // get pilot's desired yaw rate
     target_yaw_rate = get_pilot_desired_yaw_rate(channel_yaw->get_control_in());
 

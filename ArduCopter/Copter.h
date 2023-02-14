@@ -73,7 +73,6 @@
 #include "config.h"
 
 #define USERHOOK_FASTLOOP
-#define USERHOOK_50HZLOOP
 
 
 #if FRAME_CONFIG == HELI_FRAME
@@ -263,7 +262,8 @@ private:
 
     // used to detect MAVLink acks from GCS to stop compassmot
     uint8_t command_ack_counter;
-
+    uint8_t addRollAngle = 0;
+    uint8_t addPitchAngle = 0;
     // primary input control channels 主要的控制通道输入
     RC_Channel *channel_roll;
     RC_Channel *channel_pitch;
@@ -885,7 +885,7 @@ private:
     void save_trim();
     void auto_trim();
 
-    // system.cpp
+    // system.cpp 应该指的是一些系统驱动程序
     void init_ardupilot();
     void startup_INS_ground();
     void update_dynamic_notch();
@@ -1009,7 +1009,7 @@ public:
     void failsafe_check();      // failsafe.cpp
 };
 
-extern Copter copter;
+extern Copter copter;//extern一般是使用在多文件之间需要共享某些代码时
 
 using AP_HAL::millis;
 using AP_HAL::micros;

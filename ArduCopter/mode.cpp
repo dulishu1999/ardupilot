@@ -7,6 +7,7 @@
 
 /*
   constructor for Mode object
+  构造函数的构造过程实际上就是内存分配的过程
  */
 Mode::Mode(void) :
     g(copter.g),
@@ -18,7 +19,8 @@ Mode::Mode(void) :
     ahrs(copter.ahrs),
     attitude_control(copter.attitude_control),
     motors(copter.motors),
-    channel_roll(copter.channel_roll),
+    //通道对象的构造，也就是说下面四个通道同时构建了四个RC_Channel 对象
+    channel_roll(copter.channel_roll),//在copter.cpp 和mode.cpp 中的channel_roll都是指向同一个对象
     channel_pitch(copter.channel_pitch),
     channel_throttle(copter.channel_throttle),
     channel_yaw(copter.channel_yaw),
